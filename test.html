@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>
+    canvas简单画板
+  </title>
+  <style type="text/css">
+    h2{text-align: center;}
+    .content{ width:600px; height:500px; border:1px solid #ccc; margin: 0 auto;}
+    canvas{width:600px;height:500px;}
+  </style>
+</head>
+
+<body>
+<h2>
+  canvas简单画板
+</h2>
+<div class="content">
+  <canvas id="can" width="600" height="500"></canvas>
+</div>
+
+<script type="text/javascript">
+  (function(){
+    var canvas = document.getElementById('can'),
+      context= canvas.getContext('2d'),
+      options = {     //定义画笔相关参数
+        lineWidth : 1,      //粗细
+        strokeStyle: '#f60' //颜色
+      },
+      events = {
+        mousedown: function(e){ //鼠标按下记住
+          this.isButtonDown = true;
+          context.beginPath();
+          context.moveTo( e.offsetX,e.offsetY )
+        },
+        mousemove:function(e){  //移动画图
+          var pos = { x:e.offsetX, y:e.offsetY };
+          if(this.isButtonDown){
+            context.lineTo(pos.x, pos.y);
+            context.stroke();
+          }
+        },
+        mouseup:function(e){    //鼠标放开停止画图
+          this.isButtonDown = false;
+        }
+      };
+
+    /*把画笔相关参数赋值*/
+    for(var k in options){
+      context[k] = options[k]
+    }
+    /*绑定相关事件*/
+    for(var i in events){
+      canvas.addEventListener(i,events[i]);
+    }
+
+    var img = document.createElement('img');
+    img.src = "http://sandbox.runjs.cn/uploads/rs/296/iehoqtsc/clock.png";
+    img.onload = function(){
+      context.drawImage( this, 50, 0, 500, 500 );
+    };
+
+
+  })();
+</script>
+</body>
+</html>
